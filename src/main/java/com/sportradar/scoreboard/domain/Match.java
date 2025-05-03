@@ -1,22 +1,38 @@
 package com.sportradar.scoreboard.domain;
 
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 
+@Data
+@Builder
 @RequiredArgsConstructor
-@Getter
-public abstract class Match {
+public class Match {
 
     private String homeTeam;
     private String awayTeam;
     private int homeScore;
     private int awayScore;
     private LocalDateTime matchStart;
+    //Enum sportType?
 
-    public int calculateTotalScore(int homeScore, int awayScore) {
+    public Match(String homeTeam, String awayTeam) {
+        this.homeTeam = homeTeam;
+        this.awayTeam = awayTeam;
+        this.homeScore = 0;
+        this.awayScore = 0;
+        this.matchStart = LocalDateTime.now();
+    }
+
+    public int totalScore() {
         return homeScore + awayScore;
     }
 
+    public String summary() {
+        return String.format("%s %d - %s %d", homeTeam, homeScore, awayTeam, awayScore);
+    }
+
 }
+
