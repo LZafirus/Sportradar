@@ -26,6 +26,11 @@ public class Match {
         this.matchStart = LocalDateTime.now();
     }
 
+    public void updateScore(int homeScore, int awayScore) {
+        this.homeScore = homeScore;
+        this.awayScore = awayScore;
+    }
+
     public int totalScore() {
         return homeScore + awayScore;
     }

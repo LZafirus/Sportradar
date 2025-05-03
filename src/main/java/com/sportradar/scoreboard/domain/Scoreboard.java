@@ -10,11 +10,15 @@ public class Scoreboard {
     private final List<Match> matches = new ArrayList<>();
 
     public void addMatch(Match match) {
-
+        if (findMatch(match.getHomeTeam(), match.getAwayTeam()).isPresent()) {
+            throw new IllegalArgumentException("Match already exists");
+        }
+        matches.add(match);
     }
 
     public void updateScore(String homeTeam, String awayTeam, int homeScore, int awayScore) {
-
+        Match match = getMatch(homeTeam, awayTeam);
+        match.updateScore(homeScore, awayScore);
     }
 
     public void removeMatch(String homeTeam, String awayTeam) {
