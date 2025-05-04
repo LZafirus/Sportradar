@@ -2,23 +2,22 @@ package com.sportradar.scoreboard.domain;
 
 import java.time.LocalDateTime;
 
-class Match {
+public class Match {
     private final String homeTeam;
     private final String awayTeam;
     private int homeScore;
     private int awayScore;
     private LocalDateTime startTime;
 
-    private Match(String homeTeam, String awayTeam) {
+    Match(String homeTeam, String awayTeam) {
         this.homeTeam = homeTeam;
         this.awayTeam = awayTeam;
         this.homeScore = 0;
         this.awayScore = 0;
-        this.startTime = LocalDateTime.now();
     }
 
-    public static Match create(String homeTeam, String awayTeam) {
-        return new Match(homeTeam, awayTeam);
+    public void startMatch() {
+        this.startTime = LocalDateTime.now();
     }
 
     public void updateScore(int homeScore, int awayScore) {
