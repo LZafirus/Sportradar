@@ -16,15 +16,14 @@ public class ScoreboardService implements BoardService {
     }
 
     @Override
-    public void startMatch(String homeTeam, String awayTeam) {
-        Match match = new Match(homeTeam, awayTeam);
+    public void startMatch(Match match) {
         match.startMatch();
         scoreboard.addMatch(match);
     }
 
     @Override
-    public void updateScore(String homeTeam, String awayTeam, int homeScore, int awayScore) {
-        scoreboard.updateScore(homeTeam, awayTeam, homeScore, awayScore);
+    public void updateScore(Match match, int homeScore, int awayScore) {
+        scoreboard.updateScore(match, homeScore, awayScore);
     }
 
     @Override

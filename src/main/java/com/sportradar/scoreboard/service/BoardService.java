@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface BoardService {
 
-    void startMatch(String homeTeam, String awayTeam);
-    void updateScore(String homeTeam, String awayTeam, int homeScore, int awayScore);
+    void startMatch(Match match);
+    void updateScore(Match match, int homeScore, int awayScore);
     List<Match> getSummary();
 }

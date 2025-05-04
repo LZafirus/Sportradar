@@ -2,7 +2,6 @@ package com.sportradar.scoreboard.domain
 
 import com.sportradar.scoreboard.service.ScoreboardService
 import spock.lang.Specification
-import spock.lang.Subject
 
 
 class ScoreboardTest extends Specification {
@@ -10,40 +9,36 @@ class ScoreboardTest extends Specification {
     Scoreboard scoreboard = Mock()
     ScoreboardService scoreboardService = new ScoreboardService(scoreboard)
 
-    def match = Mock(Match)
-
-
     def "should start a new match"() {
         given:
-        def homeTeam = "Home"
-        def awayTeam = "Away"
+        Match match = prepareMatch("Home", "Away")
 
         when:
-        scoreboardService.startMatch(homeTeam, awayTeam)
+        scoreboardService.startMatch(match)
 
         then:
         1 * scoreboard.addMatch(_ as Match) >> { Match m ->
-            assert m.getHomeTeam() == homeTeam
-            assert m.getAwayTeam() == awayTeam
+            assert m.getHomeTeam() == "Home"
+            assert m.getAwayTeam() == "Away"
         }
     }
 
     def "should update score for existing match"() {
         given:
-        def homeTeam = "Home"
-        def awayTeam = "Away"
+        Match match = prepareMatch("Home", "Away")
         def homeScore = 2
         def awayScore = 1
 
         when:
-        scoreboardService.updateScore(homeTeam, awayTeam, homeScore, awayScore)
+        scoreboardService.updateScore(match, homeScore, awayScore)
 
         then:
-        1 * scoreboard.updateScore(homeTeam, awayTeam, homeScore, awayScore)
+        1 * scoreboard.updateScore(match, homeScore, awayScore)
     }
 
     def "should get summary of matches"() {
         given:
+        Match match = prepareMatch("Home", "Away")
         def expectedMatches = [match]
 
         when:
@@ -57,38 +52,22 @@ class ScoreboardTest extends Specification {
     def "should return matches ordered by total score and most recent"() {
         given:
         def mexicoCanada = new Match("Mexico", "Canada")
-        mexicoCanada.startMatch()
-        mexicoCanada.updateScore(0, 5)
-
         def spainBrazil = new Match("Spain", "Brazil")
-        spainBrazil.startMatch()
-        spainBrazil.updateScore(10, 2)
-
         def germanyFrance = new Match("Germany", "France")
-        germanyFrance.startMatch()
-        germanyFrance.updateScore(2, 2)
-
         def uruguayItaly = new Match("Uruguay", "Italy")
-        uruguayItaly.startMatch()
-        uruguayItaly.updateScore(6, 6)
-
         def argentinaAustralia = new Match("Argentina", "Australia")
-        argentinaAustralia.startMatch()
-        argentinaAustralia.updateScore(3, 1)
 
         // Start matches in order
-        scoreboardService.startMatch("Mexico", "Canada")
-        scoreboardService.startMatch("Spain", "Brazil")
-        scoreboardService.startMatch("Germany", "France")
-        scoreboardService.startMatch("Uruguay", "Italy")
-        scoreboardService.startMatch("Argentina", "Australia")
-
-        // Update scores
-        scoreboardService.updateScore("Mexico", "Canada", 0, 5)
-        scoreboardService.updateScore("Spain", "Brazil", 10, 2)
-        scoreboardService.updateScore("Germany", "France", 2, 2)
-        scoreboardService.updateScore("Uruguay", "Italy", 6, 6)
-        scoreboardService.updateScore("Argentina", "Australia", 3, 1)
+        scoreboardService.startMatch(mexicoCanada)
+        mexicoCanada.updateScore(0, 5)
+        scoreboardService.startMatch(spainBrazil)
+        spainBrazil.updateScore(10, 2)
+        scoreboardService.startMatch(germanyFrance)
+        germanyFrance.updateScore(2, 2)
+        scoreboardService.startMatch(uruguayItaly)
+        uruguayItaly.updateScore(6, 6)
+        scoreboardService.startMatch(argentinaAustralia)
+        argentinaAustralia.updateScore(3, 1)
 
         when:
         def result = scoreboardService.getSummary()
@@ -104,5 +83,9 @@ class ScoreboardTest extends Specification {
                 "Argentina 3 - Australia 1",
                 "Germany 2 - France 2"
         ]
+    }
+
+    def prepareMatch(String homeTeam, String awayTeam){
+        return new Match(homeTeam, awayTeam)
     }
 }

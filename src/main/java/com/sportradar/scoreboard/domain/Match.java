@@ -20,7 +20,7 @@ public class Match {
     public void updateScore(int homeScore, int awayScore) {
         this.homeScore = homeScore;
         this.awayScore = awayScore;
-    }
+    } //czy tutaj przypadkiem nie rypnie sie nadpisywanie zamiast dodawane?
 
     public int totalScore() {
         return homeScore + awayScore;

@@ -15,8 +15,7 @@ public class Scoreboard {
         matches.add(match);
     }
 
-    public void updateScore(String homeTeam, String awayTeam, int homeScore, int awayScore) {
-        Match match = getMatch(homeTeam, awayTeam);
+    public void updateScore(Match match, int homeScore, int awayScore) {
         match.updateScore(homeScore, awayScore);
     }
 
@@ -35,15 +34,5 @@ public class Scoreboard {
                         && match.getAwayTeam().equalsIgnoreCase(awayTeam))
                 .findAny();
     }
-
-    private Match getMatch(String homeTeam, String awayTeam) {
-        return findMatch(homeTeam, awayTeam)
-                .orElseThrow(() -> new NoSuchElementException("Match not found"));
-    }
-
-    /*
-    custom exception to do
-     */
-
 
 }
