@@ -25,7 +25,7 @@ class ScoreboardTest extends Specification {
             def match = scoreboard.summary()[0]
 
         when:
-            scoreboard.updateScore(match, 2, 1)
+            scoreboard.updateScore("Team A", "Team B", 2, 1)
 
         then:
             match.homeScore == 2
@@ -38,7 +38,7 @@ class ScoreboardTest extends Specification {
             def match = scoreboard.summary()[0]
 
         when:
-            scoreboard.finishMatch(match)
+            scoreboard.finishMatch("Team A", "Team B")
 
         then:
             scoreboard.summary().isEmpty()
@@ -50,9 +50,9 @@ class ScoreboardTest extends Specification {
         scoreboard.startNewMatch("Home2", "Away2")
         scoreboard.startNewMatch("Home3", "Away3")
 
-            scoreboard.updateScore(match1, 1, 0)
-            scoreboard.updateScore(match2, 3, 0)
-            scoreboard.updateScore(match3, 0, 3)
+            scoreboard.updateScore("Home1", "Away1", 1, 0)
+            scoreboard.updateScore("Home2", "Away2", 3, 0)
+            scoreboard.updateScore("Home3", "Away3", 0, 3)
 
         when:
             def summary = scoreboard.summary()
@@ -71,7 +71,4 @@ class ScoreboardTest extends Specification {
             scoreboard.summary().size() == 3
     }
 
-    def prepareMatch(String home, String away) {
-        return Match.create(home, away)
-    }
 }
