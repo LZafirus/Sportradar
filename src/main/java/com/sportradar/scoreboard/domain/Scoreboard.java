@@ -20,6 +20,7 @@ public class Scoreboard {
     public void updateScore(String homeTeam, String awayTeam, int homeScore, int awayScore) {
         validateTeamNames(homeTeam, awayTeam);
         validateScores(homeScore, awayScore);
+
         Match match = findMatch(homeTeam, awayTeam)
                 .orElseThrow(() -> new IllegalStateException("Match not found"));
         match.updateScore(homeScore, awayScore);
@@ -27,6 +28,7 @@ public class Scoreboard {
 
     public void finishMatch(String homeTeam, String awayTeam) {
         validateTeamNames(homeTeam, awayTeam);
+
         Match match = findMatch(homeTeam, awayTeam)
                 .orElseThrow(() -> new IllegalStateException("Match not found"));
         matches.remove(match);
