@@ -59,8 +59,8 @@ class ScoreboardTest extends Specification {
             scoreboard.startNewMatch("Home6", "Away6")
         Thread.sleep(100)
             scoreboard.updateScore("Home1", "Away1", 1, 0) // 6
-            scoreboard.updateScore("Home2", "Away2", 3, 0) // 5
-            scoreboard.updateScore("Home3", "Away3", 0, 3) // 4
+            scoreboard.updateScore("Home2", "Away2", 3, 0) // 5 <-!
+            scoreboard.updateScore("Home3", "Away3", 0, 3) // 4 <-!
             scoreboard.updateScore("Home4", "Away4", 0, 5) // 3
             scoreboard.updateScore("Home5", "Away5", 3, 3) // 2
             scoreboard.updateScore("Home6", "Away6", 0, 9) // 1
