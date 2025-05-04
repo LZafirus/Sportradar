@@ -1,22 +1,24 @@
 package com.sportradar.scoreboard.domain;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
 
-
 public class Scoreboard {
-
     private final List<Match> matches = new ArrayList<>();
 
-    public void addMatch(Match match) {
-        if (findMatch(match.getHomeTeam(), match.getAwayTeam()).isPresent()) {
-            throw new IllegalArgumentException("Match already exists");
-        }
-        matches.add(match);
+    public void startNewMatch(String homeTeam, String awayTeam) {
+        Match match = Match.create(homeTeam, awayTeam);
+        addMatch(match);
     }
 
     public void updateScore(Match match, int homeScore, int awayScore) {
         match.updateScore(homeScore, awayScore);
+    }
+
+    public void finishMatch(Match match) {
+        matches.remove(match);
     }
 
     public List<Match> summary() {
@@ -28,11 +30,7 @@ public class Scoreboard {
                 .collect(Collectors.toList());
     }
 
-    private Optional<Match> findMatch(String homeTeam, String awayTeam) {
-        return matches.stream()
-                .filter(match -> match.getHomeTeam().equalsIgnoreCase(homeTeam)
-                        && match.getAwayTeam().equalsIgnoreCase(awayTeam))
-                .findAny();
+    private void addMatch(Match match) {
+        matches.add(match);
     }
-
 }
