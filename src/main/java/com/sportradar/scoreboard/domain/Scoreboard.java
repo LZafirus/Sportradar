@@ -1,10 +1,9 @@
 package com.sportradar.scoreboard.domain;
 
-import lombok.AllArgsConstructor;
-
 import java.util.*;
+import java.util.stream.Collectors;
 
-@AllArgsConstructor
+
 public class Scoreboard {
 
     private final List<Match> matches = new ArrayList<>();
@@ -21,15 +20,13 @@ public class Scoreboard {
         match.updateScore(homeScore, awayScore);
     }
 
-    public void removeMatch(String homeTeam, String awayTeam) {
-        // will be removed?
-    }
-
     public List<Match> summary() {
         return matches.stream()
-                .sorted(Comparator.comparingInt(Match::totalScore).reversed()
-                        .thenComparing(Match::getMatchStart).reversed())
-                .toList();
+                .sorted(Comparator
+                        .comparingInt(Match::totalScore).reversed()
+                        .thenComparing(Match::getStartTime).reversed()
+                )
+                .collect(Collectors.toList());
     }
 
     private Optional<Match> findMatch(String homeTeam, String awayTeam) {
