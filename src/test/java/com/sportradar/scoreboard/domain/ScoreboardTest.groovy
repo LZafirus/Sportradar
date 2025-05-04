@@ -1,6 +1,7 @@
 package com.sportradar.scoreboard.domain
 
 import spock.lang.Specification
+import spock.lang.Unroll
 
 class ScoreboardTest extends Specification {
 
@@ -69,6 +70,73 @@ class ScoreboardTest extends Specification {
 
         then:
             scoreboard.summary().size() == 3
+    }
+
+    @Unroll
+    def "should throw exception when team names are invalid"() {
+        when:
+        scoreboard.startNewMatch(homeTeam, awayTeam)
+
+        then:
+        def e = thrown(IllegalArgumentException)
+        e.message == expectedMessage
+
+        where:
+        homeTeam | awayTeam | expectedMessage
+        null     | "Team B" | "Team names cannot be null"
+        "Team A" | null     | "Team names cannot be null"
+        ""       | "Team B" | "Team names cannot be empty"
+        "Team A" | ""       | "Team names cannot be empty"
+        "Team A" | "Team A" | "Home team and away team cannot be the same"
+    }
+
+    def "should throw exception when trying to start duplicate match"() {
+        given:
+        scoreboard.startNewMatch("Team A", "Team B")
+
+        when:
+        scoreboard.startNewMatch("Team A", "Team B")
+
+        then:
+        def e = thrown(IllegalStateException)
+        e.message == "Match between these teams already exists"
+    }
+
+    @Unroll
+    def "should throw exception when scores are invalid"() {
+        given:
+        scoreboard.startNewMatch("Team A", "Team B")
+
+        when:
+        scoreboard.updateScore("Team A", "Team B", homeScore, awayScore)
+
+        then:
+        def e = thrown(IllegalArgumentException)
+        e.message == "Scores cannot be negative"
+
+        where:
+        homeScore | awayScore
+        -1        | 0
+        0        | -1
+        -1        | -1
+    }
+
+    def "should throw exception when updating score of non-existent match"() {
+        when:
+        scoreboard.updateScore("Team A", "Team B", 1, 0)
+
+        then:
+        def e = thrown(IllegalStateException)
+        e.message == "Match not found"
+    }
+
+    def "should throw exception when finishing non-existent match"() {
+        when:
+        scoreboard.finishMatch("Team A", "Team B")
+
+        then:
+        def e = thrown(IllegalStateException)
+        e.message == "Match not found"
     }
 
 }

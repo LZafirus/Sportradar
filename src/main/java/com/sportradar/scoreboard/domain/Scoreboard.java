@@ -10,6 +10,9 @@ public class Scoreboard {
     private final List<Match> matches= new ArrayList<>();
 
     public Match startNewMatch(String homeTeam, String awayTeam) {
+        validateTeamNames(homeTeam, awayTeam);
+        validateMatchDoesNotExist(homeTeam, awayTeam);
+
         Match match = new Match(homeTeam, awayTeam);
         match.startMatch();
         matches.add(match);
@@ -17,11 +20,18 @@ public class Scoreboard {
     }
 
     public void updateScore(String homeTeam, String awayTeam, int homeScore, int awayScore) {
-        findMatch(homeTeam, awayTeam).ifPresent(match -> match.updateScore(homeScore, awayScore));
+        validateTeamNames(homeTeam, awayTeam);
+        validateScores(homeScore, awayScore);
+        Match match = findMatch(homeTeam, awayTeam)
+                .orElseThrow(() -> new IllegalStateException("Match not found"));
+        match.updateScore(homeScore, awayScore);
     }
 
     public void finishMatch(String homeTeam, String awayTeam) {
-        findMatch(homeTeam, awayTeam).ifPresent(matches::remove);
+        validateTeamNames(homeTeam, awayTeam);
+        Match match = findMatch(homeTeam, awayTeam)
+                .orElseThrow(() -> new IllegalStateException("Match not found"));
+        matches.remove(match);
     }
 
     public List<Match> summary() {
@@ -37,6 +47,30 @@ public class Scoreboard {
         return matches.stream()
                 .filter(match -> match.getHomeTeam().equals(homeTeam) && match.getAwayTeam().equals(awayTeam))
                 .findFirst();
+    }
+
+    private void validateTeamNames(String homeTeam, String awayTeam) {
+        if (homeTeam == null || awayTeam == null) {
+            throw new IllegalArgumentException("Team names cannot be null");
+        }
+        if (homeTeam.isBlank() || awayTeam.isBlank()) {
+            throw new IllegalArgumentException("Team names cannot be empty");
+        }
+        if (homeTeam.equals(awayTeam)) {
+            throw new IllegalArgumentException("Home team and away team cannot be the same");
+        }
+    }
+
+    private void validateMatchDoesNotExist(String homeTeam, String awayTeam) {
+        if (findMatch(homeTeam, awayTeam).isPresent()) {
+            throw new IllegalStateException("Match between these teams already exists");
+        }
+    }
+
+    private void validateScores(int homeScore, int awayScore) {
+        if (homeScore < 0 || awayScore < 0) {
+            throw new IllegalArgumentException("Scores cannot be negative");
+        }
     }
 
 }
