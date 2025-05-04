@@ -6,7 +6,6 @@ import spock.lang.Unroll
 class ScoreboardTest extends Specification {
 
     Scoreboard scoreboard = new Scoreboard()
-    Match match = Mock()
 
     def "Should correctly start new match"() {
         when:
@@ -37,7 +36,6 @@ class ScoreboardTest extends Specification {
     def "Should correctly remove match from scoreboard list"() {
         given:
             scoreboard.startNewMatch("Team A", "Team B")
-            def match = scoreboard.summary()[0]
 
         when:
             scoreboard.finishMatch("Team A", "Team B")
@@ -78,8 +76,6 @@ class ScoreboardTest extends Specification {
             summary.get(3).getHomeTeam() == "Home3"
             summary.get(4).getHomeTeam() == "Home2"
             summary.get(5).getHomeTeam() == "Home1"
-
-
     }
 
     def "should handle multiple matches"() {
