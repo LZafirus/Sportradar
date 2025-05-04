@@ -1,7 +1,6 @@
 package com.sportradar.scoreboard.domain;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -9,14 +8,13 @@ import java.util.stream.Collectors;
 public class Scoreboard {
     private final List<Match> matches= new ArrayList<>();
 
-    public Match startNewMatch(String homeTeam, String awayTeam) {
+    public void startNewMatch(String homeTeam, String awayTeam) {
         validateTeamNames(homeTeam, awayTeam);
         validateMatchDoesNotExist(homeTeam, awayTeam);
 
         Match match = new Match(homeTeam, awayTeam);
         match.startMatch();
         matches.add(match);
-        return match;
     }
 
     public void updateScore(String homeTeam, String awayTeam, int homeScore, int awayScore) {
@@ -36,10 +34,7 @@ public class Scoreboard {
 
     public List<Match> summary() {
         return matches.stream()
-                .sorted(Comparator
-                        .comparingInt(Match::totalScore).reversed()
-                        .thenComparing(Match::getStartTime).reversed()
-                )
+                .sorted(Match.COMPARATOR)
                 .collect(Collectors.toList());
     }
 
