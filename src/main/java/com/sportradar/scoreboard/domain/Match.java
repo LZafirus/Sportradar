@@ -2,7 +2,7 @@ package com.sportradar.scoreboard.domain;
 
 import java.time.LocalDateTime;
 
-public class Match {
+class Match {
     private final String homeTeam;
     private final String awayTeam;
     private int homeScore;
@@ -29,7 +29,6 @@ public class Match {
         return homeScore + awayScore;
     }
 
-    // Getters
     public String getHomeTeam() {
         return homeTeam;
     }
