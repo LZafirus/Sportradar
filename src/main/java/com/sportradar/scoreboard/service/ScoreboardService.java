@@ -7,11 +7,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
 public class ScoreboardService implements BoardService {
 
-    @Autowired
-    private Scoreboard scoreboard;
+    private final Scoreboard scoreboard;
+
+    public ScoreboardService(Scoreboard scoreboard) {
+        this.scoreboard = scoreboard;
+    }
 
     @Override
     public void startMatch(String homeTeam, String awayTeam) {

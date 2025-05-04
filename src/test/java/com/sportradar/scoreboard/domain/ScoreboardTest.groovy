@@ -7,15 +7,11 @@ import spock.lang.Subject
 
 class ScoreboardTest extends Specification {
 
-    @Subject
-    ScoreboardService scoreboardService
+    Scoreboard scoreboard = Mock()
+    ScoreboardService scoreboardService = new ScoreboardService(scoreboard)
 
-    def scoreboard = Mock(Scoreboard)
     def match = Mock(Match)
 
-    def setup() {
-        scoreboardService = new ScoreboardService(scoreboard: scoreboard)
-    }
 
     def "should start a new match"() {
         given:
